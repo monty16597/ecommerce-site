@@ -1,4 +1,4 @@
-// src/components/Navbar.js
+// src/components/NavBar.js
 
 import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa'; // Make sure to install react-icons

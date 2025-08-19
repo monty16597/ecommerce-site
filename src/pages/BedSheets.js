@@ -1,21 +1,51 @@
-// src/pages/BedSheet.js
+// src/pages/BedSheets.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard';
-import { allProducts } from '../data/productsData'; // Import the centralized data
 
-const BedSheetPage = ({ addToCart }) => {
-  // Filter products by the "Bedsheets" category
-  const bedsheets = allProducts.filter(p => p.category === "Bedsheets");
+// !! Replace with your actual Lambda function URL
+const API_URL = 'https://sqkdwhelxkfjod7vtn5xyxm3q40hhfcm.lambda-url.ca-central-1.on.aws/';
 
+const BedSheetsPage = ({ addToCart }) => {
+  const [bedsheets, setBedsheets] = useState([]);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBedsheets = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}?category=Bedsheets`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setBedsheets(data);
+        setLoading(false);
+      } catch (e) {
+        console.error("Failed to fetch bedsheets:", e);
+        setError("Failed to load products. Please try again later.");
+        setLoading(false);
+      }
+    };
+    fetchBedsheets();
+  }, []);
 
   const filteredBedsheets = bedsheets.filter((product) => {
     const isMinPriceMet = minPrice === '' || product.price >= parseFloat(minPrice);
     const isMaxPriceMet = maxPrice === '' || product.price <= parseFloat(maxPrice);
     return isMinPriceMet && isMaxPriceMet;
   });
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-xl font-semibold">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="min-h-screen flex items-center justify-center text-xl text-red-500">{error}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
@@ -59,4 +89,4 @@ const BedSheetPage = ({ addToCart }) => {
   );
 };
 
-export default BedSheetPage;
+export default BedSheetsPage;

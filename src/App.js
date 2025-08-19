@@ -4,9 +4,9 @@ import React, { useState, useEffect } from 'react'; // Import useEffect
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
 import AboutPage from './pages/About';
-import NavBar from './components/Navbar';
-import BedSheetPage from './pages/BedSheet';
-import ProductDetailPage from './pages/ProductDetail';
+import NavBar from './components/NavBar';
+import BedSheetsPage from './pages/BedSheets';
+import ProductDetailsPage from './pages/ProductDetails';
 import ClothsPage from './pages/Cloths';
 import CartPage from './pages/Cart';
 
@@ -55,9 +55,9 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage addToCart={addToCart} />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/bedsheets" element={<BedSheetPage addToCart={addToCart} />} />
+        <Route path="/bedsheets" element={<BedSheetsPage addToCart={addToCart} />} />
         <Route path="/cloths" element={<ClothsPage addToCart={addToCart} />} />
-        <Route path="/product/:id" element={<ProductDetailPage addToCart={addToCart} />} />
+        <Route path="/product/:id" element={<ProductDetailsPage addToCart={addToCart} />} />
         <Route path="/cart" element={<CartPage cart={cart} removeFromCart={removeFromCart} setCart={setCart} />} />
       </Routes>
     </BrowserRouter>
