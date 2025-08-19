@@ -1,6 +1,5 @@
 // src/pages/Home.js
 
-import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 
 const HomePage = ({ addToCart }) => { // FIX: Accept addToCart prop
