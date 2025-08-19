@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import ProductCard from '../components/ProductCard';
 
-const BedSheetPage = () => {
-  // Mock data for bedsheet products.
+const BedSheetPage = ({ addToCart }) => {
   const bedsheets = [
     { id: 5, name: "Luxury Cotton Bedsheet Set", price: 79.99, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+1" },
     { id: 6, name: "Silk Blend Bedding", price: 129.50, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+2" },
@@ -14,11 +13,9 @@ const BedSheetPage = () => {
     { id: 10, name: "Geometric Print Set", price: 95.25, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+6" },
   ];
 
-  // State to manage the filter inputs
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
 
-  // Function to filter products based on state
   const filteredBedsheets = bedsheets.filter((product) => {
     const isMinPriceMet = minPrice === '' || product.price >= parseFloat(minPrice);
     const isMaxPriceMet = maxPrice === '' || product.price <= parseFloat(maxPrice);
@@ -28,7 +25,6 @@ const BedSheetPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
       <main className="max-w-7xl mx-auto">
-        {/* Filter Panel at the top */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6 sm:mb-8">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Filters</h2>
           <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-8">
@@ -53,13 +49,11 @@ const BedSheetPage = () => {
             </div>
           </div>
         </div>
-
-        {/* Product Listing Section */}
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-6 sm:mb-8">Bedsheets</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
           {filteredBedsheets.length > 0 ? (
             filteredBedsheets.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} addToCart={addToCart} />
             ))
           ) : (
             <p className="text-center text-gray-500 col-span-full">No products found matching your filter.</p>
