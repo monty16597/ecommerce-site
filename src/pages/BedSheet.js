@@ -2,16 +2,11 @@
 
 import React, { useState } from 'react';
 import ProductCard from '../components/ProductCard';
+import { allProducts } from '../data/productsData'; // Import the centralized data
 
 const BedSheetPage = ({ addToCart }) => {
-  const bedsheets = [
-    { id: 5, name: "Luxury Cotton Bedsheet Set", price: 79.99, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+1" },
-    { id: 6, name: "Silk Blend Bedding", price: 129.50, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+2" },
-    { id: 7, name: "Striped Duvet Cover", price: 59.99, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+3" },
-    { id: 8, name: "Solid Color Comforter", price: 89.00, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+4" },
-    { id: 9, name: "Floral Pattern Sheet", price: 65.75, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+5" },
-    { id: 10, name: "Geometric Print Set", price: 95.25, image: "https://placehold.co/400x300/E5E7EB/4B5563?text=Bedsheet+6" },
-  ];
+  // Filter products by the "Bedsheets" category
+  const bedsheets = allProducts.filter(p => p.category === "Bedsheets");
 
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');

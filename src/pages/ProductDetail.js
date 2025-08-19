@@ -2,10 +2,7 @@
 
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-
-const allProducts = [
-  // ... (all your product data)
-];
+import { allProducts } from '../data/productsData'; // Import the centralized data
 
 const ProductDetailPage = ({ addToCart }) => { // Accept addToCart prop
   const { id } = useParams();

@@ -2,16 +2,11 @@
 
 import React, { useState } from 'react';
 import ProductCard from '../components/ProductCard';
+import { allProducts } from '../data/productsData'; // Corrected import to use named export
 
 const ClothsPage = ({ addToCart }) => {
-  const cloths = [
-    { id: 11, name: "Casual T-Shirt", price: 25.99, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=T-Shirt" },
-    { id: 12, name: "Denim Jeans", price: 59.50, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Jeans" },
-    { id: 13, name: "Hooded Sweatshirt", price: 45.00, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Sweatshirt" },
-    { id: 14, name: "Summer Dress", price: 35.75, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Dress" },
-    { id: 15, name: "Formal Blazer", price: 120.00, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Blazer" },
-    { id: 16, name: "Running Shorts", price: 29.99, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Shorts" },
-  ];
+  // Filter products by the "Cloths" category
+  const cloths = allProducts.filter(p => p.category === "Cloths");
 
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');

@@ -1,14 +1,10 @@
 // src/pages/Home.js
 
 import ProductCard from '../components/ProductCard';
+import { featuredProducts } from '../data/productsData'; // Corrected import to use named export
 
-const HomePage = ({ addToCart }) => { // FIX: Accept addToCart prop
-  const products = [
-    { id: 1, name: "Stylish Backpack", price: 49.99, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Backpack" },
-    { id: 2, name: "Premium Headphones", price: 199.99, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Headphones" },
-    { id: 3, name: "Digital Watch", price: 79.99, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Watch" },
-    { id: 4, name: "Portable Speaker", price: 89.99, image: "https://placehold.co/400x300/F0F4F8/3B82F6?text=Speaker" },
-  ];
+const HomePage = ({ addToCart }) => {
+  // `featuredProducts` is now correctly imported and ready to be used.
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
@@ -23,7 +19,7 @@ const HomePage = ({ addToCart }) => { // FIX: Accept addToCart prop
         </div>
         <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 text-center mb-6 sm:mb-8">Featured Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {products.map((product) => (
+          {featuredProducts.map((product) => (
             <ProductCard key={product.id} product={product} addToCart={addToCart} />
           ))}
         </div>
