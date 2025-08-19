@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: |
+  CloudFormation template for a secure static website hosted on Amazon S3 and
+  distributed via Amazon CloudFront.
+
+Parameters:
+  SiteBucketName:
+    Type: String
+    Description: The globally unique name for your S3 bucket.
+
+  OACName:
+    Type: String
+    Default: MySiteOAC
+    Description: The name for the CloudFront Origin Access Control.
+
+  # Note: For HTTPS, you must create a certificate in us-east-1 and provide its ARN.
+  # This template assumes you will configure HTTPS manually or in a separate template.
+  # For this simple example, we are not including certificate management.
+
+Resources:
+  # 1. S3 Bucket to hold the static website content
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref SiteBucketName
+      # Prevent public access to the bucket
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # 2. S3 Bucket Policy to allow CloudFront to read objects
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: "cloudfront.amazonaws.com"
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/*"
+            Condition:
+              StringEquals:
+                "AWS:SourceArn": !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}"
+
+  # 3. CloudFront Origin Access Control (OAC) to grant CloudFront permissions to S3
+  CloudFrontOAC:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Ref OACName
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  # 4. CloudFront Distribution to serve the content
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub 'CloudFront Distribution for ${SiteBucketName}'
+        DefaultRootObject: index.html
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt WebsiteBucket.RegionalDomainName
+            S3OriginConfig:
+              OriginAccessIdentity: "" # S3-specific config, not used with OAC
+            OriginAccessControlId: !Ref CloudFrontOAC # Use the OAC here
+        DefaultCacheBehavior:
+          ViewerProtocolPolicy: redirect-to-https # Always use HTTPS
+          TargetOriginId: S3Origin
+          # Recommended cache policy for a static site
+          CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad # CachingOptimized
+        # This will set up an error page for a 403 (Forbidden) response
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+
+Outputs:
+  WebsiteURL:
+    Description: URL of the S3 bucket website endpoint.
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+
+  CloudFrontDomain:
+    Description: Domain name of the CloudFront distribution.
+    Value: !GetAtt CloudFrontDistribution.DomainName
+
+  DistributionId:
+    Description: ID of the CloudFront distribution.
+    Value: !Ref CloudFrontDistribution
