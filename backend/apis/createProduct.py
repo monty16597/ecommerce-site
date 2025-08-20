@@ -23,7 +23,7 @@ def lambda_handler(event, context):
     try:
         # Check for admin authentication via a simple, hardcoded check.
         # A more robust solution would use a proper auth service.
-        auth_header = event.get('headers', {}).get('Authorization')
+        auth_header = event.get('headers', {}).get('authorization')
         if not auth_header or auth_header != 'Basic YWRtaW46cGFzc3dvcmQ=':
             return {
                 'statusCode': 401,

@@ -189,11 +189,13 @@ const App = () => {
       {loading && <p className="text-center">Loading...</p>}
 
       {/* Product Form */}
-      <ProductForm
-        onSave={handleCreateOrUpdate}
-        productToEdit={editProduct}
-        onCancel={() => setEditProduct(null)}
-      />
+      <div className="mx-auto max-w-lg md:max-w-2xl">
+        <ProductForm
+          onSave={handleCreateOrUpdate}
+          productToEdit={editProduct}
+          onCancel={() => setEditProduct(null)}
+        />
+      </div>
 
       {/* Product List */}
       <div className="mt-8 bg-white p-6 rounded-lg shadow-lg overflow-x-auto">
