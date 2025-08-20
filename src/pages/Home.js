@@ -4,8 +4,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import ContactUs from '../components/ContactUs';
 
-// !! Replace with your actual Lambda function URL
-const API_URL = 'https://sqkdwhelxkfjod7vtn5xyxm3q40hhfcm.lambda-url.ca-central-1.on.aws/';
+// Now both URLs share the same base URL
+const API_BASE_URL = 'https://7b23l62uacfekfihmefunsv2eu0gavxv.lambda-url.ca-central-1.on.aws/';
+const FEATURED_API_URL = `${API_BASE_URL}?featured=true`;
+const NEWLY_ADDED_API_URL = `${API_BASE_URL}?newlyAdded=true`;
 
 const HomePage = ({ addToCart }) => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -22,25 +24,22 @@ const HomePage = ({ addToCart }) => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        // Fetch featured products
-        const featuredResponse = await fetch(`${API_URL}?featured=true`);
+        
+        // Fetch featured products from the dedicated endpoint
+        const featuredResponse = await fetch(FEATURED_API_URL);
         if (!featuredResponse.ok) {
           throw new Error(`HTTP error! status: ${featuredResponse.status}`);
         }
         const featuredData = await featuredResponse.json();
         setFeaturedProducts(featuredData);
 
-        // Fetch all products to get the most recent ones
-        const allProductsResponse = await fetch(API_URL);
-        if (!allProductsResponse.ok) {
-          throw new Error(`HTTP error! status: ${allProductsResponse.status}`);
+        // Fetch newly added items from the updated Lambda function, which now handles the sorting
+        const newlyAddedResponse = await fetch(NEWLY_ADDED_API_URL);
+        if (!newlyAddedResponse.ok) {
+          throw new Error(`HTTP error! status: ${newlyAddedResponse.status}`);
         }
-        const allProductsData = await allProductsResponse.json();
-        // Sort by 'addedAt' timestamp and get the latest 10
-        const sortedNewItems = allProductsData
-          .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt))
-          .slice(0, 10);
-        setNewlyAddedItems(sortedNewItems);
+        const newlyAddedData = await newlyAddedResponse.json();
+        setNewlyAddedItems(newlyAddedData);
 
         setLoading(false);
       } catch (e) {
@@ -98,7 +97,7 @@ const HomePage = ({ addToCart }) => {
         newItemsElement.removeEventListener('scroll', handleNewItemsScroll);
       }
     };
-  }, [loading]); // Re-run effect when data loads
+  }, [loading]);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-xl font-semibold">Loading...</div>;
@@ -111,7 +110,6 @@ const HomePage = ({ addToCart }) => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
-        {/* ... (Welcome section remains the same) ... */}
         <div className="text-center py-8 sm:py-16 mb-8 sm:mb-12 bg-white rounded-xl shadow-lg">
           <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-2 sm:mb-4">
             Welcome to My Site!

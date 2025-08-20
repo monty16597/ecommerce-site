@@ -16,8 +16,8 @@ const NavBar = ({ cartItemCount }) => {
           <Link to="/" className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
             Home
           </Link>
-          <Link to="/bedsheets" className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
-            Bedsheets
+          <Link to="/bed" className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
+            Bed
           </Link>
           <Link to="/cloths" className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
             Cloths
